@@ -39,9 +39,12 @@ getCountryData('portugal')
 */
 
 const renderCountry = (data, className = '') => {
-  console.log(data);
+  // console.log(data);
+
   const cur = Object.values(data.currencies)[0];
-  console.log(cur);
+
+  // console.log(cur);
+
   const html = `
     <article class="country ${className}">
       <img class="country__img" src="${data.flags?.svg}" />
@@ -59,6 +62,7 @@ const renderCountry = (data, className = '') => {
     </article>`;
 
   countriesContainer.insertAdjacentHTML('beforeend', html);
+
   // countriesContainer.style.opacity = 1;
 };
 
@@ -107,15 +111,15 @@ getCountryAndNeighbour('usa');
 
 const renderError = msg => {
   countriesContainer.insertAdjacentText('beforeend', msg);
+
   // countriesContainer.style.opacity = 1;
 };
 
 const getJSON = (url, errorMsg = 'Something went wrong') => {
   return fetch(url).then(response => {
     // console.log(response);
-    if (!response.ok) {
-      throw new Error(`${errorMsg} (${response.status})`);
-    }
+
+    if (!response.ok) throw new Error(`${errorMsg} (${response.status})`);
     return response.json();
   });
 };
@@ -166,19 +170,22 @@ btn.addEventListener('click', () => {
 
 const getCountryData = country => {
   // Country 1
+
   getJSON(
     `https://restcountries.com/v3.1/alpha/${country}`,
     'Country Not Found'
   )
     .then(data => {
       renderCountry(data[0]);
-      // console.log(data);
       const neighbour = data[0].borders[0];
+
+      // console.log(data);
       // const neighbour = `ds23`;
       // console.log(neighbour);
-      if (!neighbour) throw new Error(`No Neighbour Found.`);
-      console.log(neighbour);
 
+      if (!neighbour) throw new Error(`No Neighbour Found.`);
+
+      // console.log(neighbour);
       // Country 2
       return getJSON(
         `https://restcountries.com/v3.1/alpha/${neighbour}`,
@@ -186,9 +193,11 @@ const getCountryData = country => {
       );
     })
     .then(data => {
-      // console.log(data);
       const [newData] = data;
-      console.log(newData);
+
+      // console.log(data);
+      // console.log(newData);
+
       return renderCountry(newData, 'neighbour');
     })
     .catch(err => {
